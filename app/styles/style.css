@@ -192,8 +192,8 @@ hr {
 	margin-left: 10px;
 }
 #about img {
-	display: inline-block;
-	padding-left: 120px;
+	width: 100%;
+	height: auto;
 }
 #about p {
 	margin-top: 100px;
