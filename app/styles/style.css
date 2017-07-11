@@ -206,11 +206,9 @@ hr {
 #about button{
 	margin-top: 5%;
   color: black;
-	border-color: #46B0D5;
 	background-color: #46B0D5;
 	border: 2px solid;
 	border-radius: 25px;
-	font-size: 500%;
 	margin-left:36%;
 }
 /* Skills Section */
