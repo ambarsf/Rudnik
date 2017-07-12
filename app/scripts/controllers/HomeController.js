@@ -5,8 +5,6 @@ angular.module('AngularScaffold.Controllers')
          can_h = parseInt(canvas.getAttribute('height')),
          ctx = canvas.getContext('2d');
 
-      // console.log(typeof can_w);
-
       var ball = {
             x: 0,
             y: 0,
@@ -17,9 +15,9 @@ angular.module('AngularScaffold.Controllers')
             phase: 0
          },
          ball_color = {
-             r: 207,
-             g: 255,
-             b: 4
+             r: 30,
+             g: 149,
+             b: 202
          },
          R = 2,
          balls = [],
@@ -68,7 +66,6 @@ angular.module('AngularScaffold.Controllers')
       function randomNumFrom(min, max){
           return Math.random()*(max - min) + min;
       }
-      console.log(randomNumFrom(0, 10));
       // Random Ball
       function getRandomBall(){
           var pos = randomArrayItem(['top', 'right', 'bottom', 'left']);
@@ -150,7 +147,6 @@ angular.module('AngularScaffold.Controllers')
               // alpha change
               b.phase += alpha_f;
               b.alpha = Math.abs(Math.cos(b.phase));
-              // console.log(b.alpha);
           });
 
           balls = new_balls.slice(0);
@@ -238,7 +234,6 @@ angular.module('AngularScaffold.Controllers')
           can_h = parseInt(canvas.getAttribute('height'));
       }
       window.addEventListener('resize', function(e){
-          console.log('Window Resize...');
           initCanvas();
       });
 
@@ -251,12 +246,10 @@ angular.module('AngularScaffold.Controllers')
 
       // Mouse effect
       canvas.addEventListener('mouseenter', function(){
-          console.log('mouseenter');
           mouse_in = true;
           balls.push(mouse_ball);
       });
       canvas.addEventListener('mouseleave', function(){
-          console.log('mouseleave');
           mouse_in = false;
           var new_balls = [];
           Array.prototype.forEach.call(balls, function(b){
@@ -270,6 +263,5 @@ angular.module('AngularScaffold.Controllers')
           var e = e || window.event;
           mouse_ball.x = e.pageX;
           mouse_ball.y = e.pageY;
-          // console.log(mouse_ball);
       });
     }]);

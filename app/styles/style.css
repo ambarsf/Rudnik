@@ -16,12 +16,34 @@ html, body{
     margin: 0;
     padding: 0;
     background-color: #333;
-    overflow: hidden;
 }
 canvas{
     background-color: #000;
 }
-
+.main-icon{
+	position: absolute;
+	height: 120px;
+	top: 35%;
+  left: 40%;
+}
+.main-text{
+	position: absolute;
+	color: white;
+	width: 500px;
+	top: 47%;
+  left: 33.5%;
+}
+.arrow-icon{
+	position: absolute;
+	height: 120px;
+	top: 55%;
+  left: 46%;
+}
+.nav-icon{
+	height: 50px;
+	margin-top: 10px;
+	margin-left: 20px;
+}
 h1 {
 	font-weight: 700;
 }
@@ -95,17 +117,14 @@ hr {
 	border: 0;
 }
 /* Navigation */
-#nav {
-	z-index: 9999;
-}
+
 #nav.affix {
-	position: fixed;
 	top: 0;
 	width: 100%
 }
 .navbar-custom {
 	margin-bottom: 0;
-	background-color: black;
+	background-color: transparent;
 	border-radius: 0px;
 	padding: 10px 0;
 }
