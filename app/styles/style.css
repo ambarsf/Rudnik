@@ -198,18 +198,20 @@ hr {
 #about p {
 	margin-top: 100px;
 	margin-bottom: 30px;
-	margin-left: 11%;
+	margin-left: 12%;
 	font-size: 130%;
 	font-style: italic;
 }
 
 #about button{
 	margin-top: 5%;
-  color: black;
+	padding: 1% 1%;
 	background-color: #46B0D5;
-	border: 2px solid;
-	border-radius: 25px;
-	margin-left:36%;
+	color:black;
+	border-radius: 8px;
+	margin-left:35%;
+	width: 30%;
+	height: auto;
 }
 /* Skills Section */
 #skills {
@@ -522,7 +524,7 @@ ol.type li a:hover {
 #contact {
 	padding: 100px 0 40px 0;
 	color: #121d1f;
-	background: #7bc3d1;
+	background: #46B0D5;
 }
 #contact h2 {
 	color: #fff;
