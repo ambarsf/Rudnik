@@ -2,11 +2,16 @@ body, html {
 	font-family: 'Open Sans', sans-serif;
 	text-rendering: optimizeLegibility !important;
 	-webkit-font-smoothing: antialiased !important;
-	color: #656c6d;
+	color: white;
 	width: 100% !important;
 	height: 100% !important;
 }
-
+.descriptive{
+	background-color: black;
+	margin-left: 150px;
+	margin-right: 150px;
+	margin-bottom: 150px;
+}
 *{
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -15,7 +20,7 @@ html, body{
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #333;
+    background-color: black;
 }
 canvas{
     background-color: #000;
@@ -53,13 +58,13 @@ h1 strong {
 h2 {
 	line-height: 20px;
 	margin: 0;
-	color: #121d1f;
+	color: #1E95CA;
 	font-weight: 400;
 	margin-bottom: 30px;
 	font-size: 34px;
 }
 h3, h4 {
-	color: #121d1f;
+	color: #27AFD5;
 	font-size: 20px;
 	font-weight: 600;
 }
@@ -200,6 +205,10 @@ hr {
 .btn-primary i.fa {
 	margin-right: 10px;
 }
+
+.mg-top{
+	margin-top: 50px;
+}
 /* Home Section */
 .intro {
 	display: table;
@@ -241,7 +250,7 @@ hr {
 #about button{
 	margin-top: 5%;
 	padding: 1% 1%;
-	background-color: #46B0D5;
+	background-color: #27AFD5;
 	color:black;
 	border-radius: 8px;
 	margin-left:35%;
@@ -251,13 +260,13 @@ hr {
 /* Skills Section */
 #skills {
 	padding: 100px 0;
-	background: #46B0D5;
+	background: #27AFD5;
 }
 #skills h2 {
 	color: #fff;
 }
 #skills hr {
-	background: rgba(255,255,255,0.3);
+	background: transparent;
 }
 #skills .skill {
 	margin-bottom: 40px;
@@ -282,15 +291,15 @@ hr {
 	left: 0;
 }
 .percent {
-	display: inline-block;
+	margin-left: -15px;
+	position: absolute;
 	font-size: 21px;
-	color: #121d1f;
+	color: white;
 	line-height: 152px;
 	z-index: 2;
 }
 .percent:after {
 	content: '%';
-	margin-left: 0.1em;
 	font-size: .8em;
 }
 /* Portfolio Section */
