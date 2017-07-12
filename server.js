@@ -3,7 +3,7 @@ var inert = require('inert');
 
 var server = new hapi.Server();
 server.connection({
-    port: ~~process.env.PORT || 8001
+    port: ~~process.env.PORT || 80
 });
 
 server.register(inert, function(err){
