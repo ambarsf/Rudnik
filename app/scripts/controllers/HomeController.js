@@ -272,12 +272,12 @@ angular.module('AngularScaffold.Controllers')
           accuracy: 0,
           type: ''
         };
-        this.load = function(communityId) {
+        $scope.load = function(communityId) {
           console.log('probando');
           MainService.GetBagWords('movies').then(function(response){
-            alert('correctly');
-            this.percentage_movies_bagwords = response;
+            $scope.percentage_movies_bagwords = response;
+            console.log($scope.percentage_movies_bagwords);
           });
         }
-        this.load();
+        $scope.load();
     }]);
