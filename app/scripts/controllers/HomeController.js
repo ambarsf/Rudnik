@@ -1,5 +1,68 @@
 angular.module('AngularScaffold.Controllers')
-    .controller('HomeController', ['$scope', 'MainService', '$sessionStorage', function($scope, MainService, $sessionStorage) {
+    .controller('HomeController', ['MainService', function(MainService) {
+        var ctrl = this;
+        ctrl.loaded = {
+            ngrams: false,
+            tfidf: false,
+            bagwords: false
+        };
+        ctrl.percentage_movies_TFIDF = {
+            accuracy: 0.0,
+            type: ''
+        };
+        ctrl.percentage_movies_ngrams = {
+            accuracy: 0.0,
+            type: ''
+        };
+        ctrl.percentage_movies_bagwords = {
+            accuracy: 0.0,
+            type: ''
+        };
+				ctrl.showChart = function() {
+					var index=0;
+					$(document).scroll(function(){
+						var top = $('#skills').height()-$(window).scrollTop();
+						console.log(ctrl.loaded.ngrams && ctrl.loaded.tfidf && ctrl.loaded.bagwords);
+						if(top<-300 && ctrl.loaded.ngrams && ctrl.loaded.tfidf && ctrl.loaded.bagwords){
+							console.log(top);
+							if(index==0){
+								$('.chart').easyPieChart({
+									easing: 'easeOutBounce',
+									onStep: function(from, to, percent) {
+										$(this.el).find('.percent').text(Math.round(percent));
+									}
+								});
+
+								}
+							index++;
+						}
+					})
+        }
+        ctrl.load = function() {
+            console.log("entre");
+            MainService.GetBagWords('movies').then(function(response) {
+                ctrl.percentage_movies_bagwords = response.data.BagWords;
+                ctrl.percentage_movies_bagwords.accuracy = ctrl.percentage_movies_bagwords.accuracy * 100;
+                ctrl.loaded.bagwords = true;
+								console.log(ctrl.percentage_movies_bagwords.accuracy);
+            });
+            MainService.GetNgrams('movies').then(function(response) {
+                ctrl.percentage_movies_ngrams = response.data.Ngrams;
+                ctrl.percentage_movies_ngrams.accuracy = ctrl.percentage_movies_ngrams.accuracy * 100;
+                ctrl.loaded.ngrams = true;
+								console.log(ctrl.percentage_movies_ngrams.accuracy);
+            });
+            MainService.GetTFIDF('movies').then(function(response) {
+                ctrl.percentage_movies_TFIDF = response.data.TFIDF;
+                ctrl.percentage_movies_TFIDF.accuracy = ctrl.percentage_movies_TFIDF.accuracy * 100;
+                ctrl.loaded.tfidf = true;
+								console.log(ctrl.percentage_movies_TFIDF.accuracy);
+            });
+
+        }
+        ctrl.load();
+ctrl.showChart();
+
         var canvas = document.getElementById('nokey'),
             can_w = parseInt(canvas.getAttribute('width')),
             can_h = parseInt(canvas.getAttribute('height')),
@@ -267,17 +330,4 @@ angular.module('AngularScaffold.Controllers')
             mouse_ball.x = e.pageX;
             mouse_ball.y = e.pageY;
         });
-
-        $scope.percentage_movies_ngrams = {
-          accuracy: 0,
-          type: ''
-        };
-        $scope.load = function(communityId) {
-          console.log('probando');
-          MainService.GetBagWords('movies').then(function(response){
-            $scope.percentage_movies_bagwords = response;
-            console.log($scope.percentage_movies_bagwords);
-          });
-        }
-        $scope.load();
     }]);
