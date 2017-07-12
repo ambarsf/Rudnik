@@ -268,7 +268,10 @@ angular.module('AngularScaffold.Controllers')
             mouse_ball.y = e.pageY;
         });
 
-        this.percentage_movies_ngrams = 0;
+        $scope.percentage_movies_ngrams = {
+          accuracy: 0,
+          type: ''
+        };
         this.load = function(communityId) {
           console.log('probando');
           MainService.GetBagWords('movies').then(function(response){

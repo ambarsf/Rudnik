@@ -36,6 +36,9 @@ $('#nav').affix({
 				$('.chart').easyPieChart({
 					easing: 'easeOutBounce',
 					onStep: function(from, to, percent) {
+            console.log("from: ",from);
+            console.log("to: ",to);
+            console.log("percent: ",percent);
 						$(this.el).find('.percent').text(Math.round(percent));
 					}
 				});
