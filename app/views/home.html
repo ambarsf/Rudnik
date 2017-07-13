@@ -1,7 +1,11 @@
 <div ng-controller="HomeController as ctrl">
 	<div id="home" class="descriptive text-center mg-top">
 		<h2>Results</h2>
-		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+		<p>We compared different text mining models with different datasets in our application to see how models behave. In the first approach we used the data about movies provided in the lab,
+			and with this data we created one endpoint for each machine to generate the results. We sent as a parameter the name of the dataset through a GET request to let the api know what dataset we wanted to use,
+			as results we received an accuracy of 47% for TFIDF, 40% for Ngrams and 42% for Bags of Words as expected. This results showed that our machine are working well. Next we tried experimenting with a different
+			dataset that we found at www.kaggle.com/datasets. This dataset is about songs lyrics and as fields it contains name, lyrics, gender and author. With this dataset we trained a model that could predict the gender
+			of a song based on the lyrics.</p>
 		<div class="row mg-top" ng-if="ctrl.loaded.ngrams && ctrl.loaded.tfidf && ctrl.loaded.bagwords">
 			<div class="col-md-4 col-sm-6 skill"> <span class="chart" data-percent="{{ctrl.percentage_movies_bagwords.accuracy}}"> <span class="percent">{{percentage_movies_bagwords.accuracy}}</span> </span>
 				<h4>Bag of Words </h4>
