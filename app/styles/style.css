@@ -233,25 +233,23 @@ hr {
 	padding: 25px 0 45px 0;
 }
 /* About Section */
-.about-img {
-    text-align: justify;
-}
 
 .about-img img {
     display: inline-block;
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
+		margin-left: 50px;
+		margin-right: 50px;
+		margin-bottom: 0px;
 }
 
+.about-img h4 {
+    display: inline-block;
+		font-size: 25px;
+		margin: 60px;
+}
 .circular--square {
   border-radius: 50%;
-}
-
-
-.about-img:after {
-    content: '';
-    display: inline-block;
-    width: 100%;
 }
 /* Skills Section */
 #skills {
