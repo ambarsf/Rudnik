@@ -209,6 +209,11 @@ hr {
 .mg-top{
 	margin-top: 50px;
 }
+
+.mg-one{
+	margin-bottom: 500px;
+}
+
 /* Home Section */
 .intro {
 	display: table;
@@ -228,34 +233,25 @@ hr {
 	padding: 25px 0 45px 0;
 }
 /* About Section */
-#about {
-	padding: 100px 0;
-	background: #f6f6f6;
-}
-#about .about-text {
-	margin-left: 10px;
-}
-#about img {
-	width: 100%;
-	height: auto;
-}
-#about p {
-	margin-top: 100px;
-	margin-bottom: 30px;
-	margin-left: 12%;
-	font-size: 130%;
-	font-style: italic;
+.about-img {
+    text-align: justify;
 }
 
-#about button{
-	margin-top: 5%;
-	padding: 1% 1%;
-	background-color: #27AFD5;
-	color:black;
-	border-radius: 8px;
-	margin-left:35%;
-	width: 30%;
-	height: auto;
+.about-img img {
+    display: inline-block;
+    width: 250px;
+    height: 250px;
+}
+
+.circular--square {
+  border-radius: 50%;
+}
+
+
+.about-img:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
 }
 /* Skills Section */
 #skills {
