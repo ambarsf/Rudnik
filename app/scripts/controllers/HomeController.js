@@ -1,11 +1,13 @@
 angular.module('AngularScaffold.Controllers')
     .controller('HomeController', ['MainService', function(MainService) {
+
         var ctrl = this;
         ctrl.loaded = {
             ngrams: false,
             tfidf: false,
             bagwords: false
         };
+        var requested = false;
         ctrl.percentage_movies_TFIDF = {
             accuracy: 0.0,
             type: ''
@@ -22,9 +24,7 @@ angular.module('AngularScaffold.Controllers')
 					var index=0;
 					$(document).scroll(function(){
 						var top = $('#skills').height()-$(window).scrollTop();
-						console.log(ctrl.loaded.ngrams && ctrl.loaded.tfidf && ctrl.loaded.bagwords);
 						if(top<-300 && ctrl.loaded.ngrams && ctrl.loaded.tfidf && ctrl.loaded.bagwords){
-							console.log(top);
 							if(index==0){
 								$('.chart').easyPieChart({
 									easing: 'easeOutBounce',
@@ -38,29 +38,30 @@ angular.module('AngularScaffold.Controllers')
 						}
 					})
         }
-        ctrl.load = function() {
+        ctrl.loading = function() {
+          if (!ctrl.requested){
+            ctrl.requested = true;
             console.log("entre");
             MainService.GetBagWords('movies').then(function(response) {
                 ctrl.percentage_movies_bagwords = response.data.BagWords;
                 ctrl.percentage_movies_bagwords.accuracy = ctrl.percentage_movies_bagwords.accuracy * 100;
                 ctrl.loaded.bagwords = true;
-								console.log(ctrl.percentage_movies_bagwords.accuracy);
+                ctrl.CallMatrixBagOfWords(ctrl.percentage_movies_bagwords.cm, ctrl.percentage_movies_bagwords.size);
             });
             MainService.GetNgrams('movies').then(function(response) {
                 ctrl.percentage_movies_ngrams = response.data.Ngrams;
                 ctrl.percentage_movies_ngrams.accuracy = ctrl.percentage_movies_ngrams.accuracy * 100;
                 ctrl.loaded.ngrams = true;
-								console.log(ctrl.percentage_movies_ngrams.accuracy);
             });
             MainService.GetTFIDF('movies').then(function(response) {
                 ctrl.percentage_movies_TFIDF = response.data.TFIDF;
                 ctrl.percentage_movies_TFIDF.accuracy = ctrl.percentage_movies_TFIDF.accuracy * 100;
                 ctrl.loaded.tfidf = true;
-								console.log(ctrl.percentage_movies_TFIDF.accuracy);
             });
-
+          }
         }
-        ctrl.load();
+        this.loading();
+        //ctrl.loading();
 ctrl.showChart();
 
         var canvas = document.getElementById('nokey'),
@@ -330,4 +331,228 @@ ctrl.showChart();
             mouse_ball.x = e.pageX;
             mouse_ball.y = e.pageY;
         });
+
+        // Matrix Stuff //
+        ctrl.CallMatrixBagOfWords = function(matrix, size){
+
+          var confusionMatrix = []
+          var index = 0;
+          for (var i = 0; i < size[0]; i++) {
+            var temp = []
+            for (var j = 0; j < size[1]; j++) {
+              temp.push(Math.round(matrix[index]*100))
+              index++;
+            }
+            confusionMatrix.push(temp);
+          }
+
+  				var tp = confusionMatrix[0][0];
+  				var fn = confusionMatrix[0][1];
+  				var fp = confusionMatrix[1][0];
+  				var tn = confusionMatrix[1][1];
+
+  				var p = tp + fn;
+  				var n = fp + tn;
+
+  				var accuracy = (tp+tn)/(p+n);
+  				var f1 = 2*tp/(2*tp+fp+fn);
+  				var precision = tp/(tp+fp);
+  				var recall = tp/(tp+fn);
+
+  				accuracy = Math.round(accuracy * 100) / 100
+  				f1 = Math.round(f1 * 100) / 100
+  				precision = Math.round(precision * 100) / 100
+  				recall = Math.round(recall * 100) / 100
+
+  				var computedData = [];
+  				computedData.push({"F1":f1, "PRECISION":precision,"RECALL":recall,"ACCURACY":accuracy});
+
+  				var labels = ['Class A', 'Class B'];
+  				ctrl.Matrix({
+  					container : '#container',
+  					data      : confusionMatrix,
+  					labels    : labels,
+  					start_color : '#ffffff',
+  					end_color : '#1e95ca'
+  				});
+
+  		// rendering the table
+  				var table = ctrl.tabulate(computedData, ["F1", "PRECISION","RECALL","ACCURACY"]);
+      }
+
+        var margin = {top: 50, right: 50, bottom: 100, left: 100};
+
+        ctrl.Matrix = function(options) {
+        	    var width = 150,
+        	    height = 150,
+        	    data = options.data,
+        	    container = options.container,
+        	    labelsData = options.labels,
+        	    startColor = options.start_color,
+        	    endColor = options.end_color;
+
+        	if(!data){
+        		throw new Error('Please pass data');
+        	}
+
+        	if(!Array.isArray(data) || !data.length || !Array.isArray(data[0])){
+        		throw new Error('It should be a 2-D array');
+        	}
+
+          var maxValue = d3.max(data, function(layer) { return d3.max(layer, function(d) { return d; }); });
+          var minValue = d3.min(data, function(layer) { return d3.min(layer, function(d) { return d; }); });
+
+        	var numrows = data.length;
+        	var numcols = data[0].length;
+
+        	var svg = d3.select(container).append("svg")
+        	    .attr("width", width + margin.left + margin.right)
+        	    .attr("height", height + margin.top + margin.bottom)
+        		.append("g")
+        	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        	var background = svg.append("rect")
+        	    .style("stroke", "white")
+        	    .style("stroke-width", "2px")
+        	    .attr("width", width)
+        	    .attr("height", height);
+
+        	var x = d3.scale.ordinal()
+        	    .domain(d3.range(numcols))
+        	    .rangeBands([0, width]);
+
+        	var y = d3.scale.ordinal()
+        	    .domain(d3.range(numrows))
+        	    .rangeBands([0, height]);
+
+        	var colorMap = d3.scale.linear()
+        	    .domain([minValue,maxValue])
+        	    .range([startColor, endColor]);
+
+        	var row = svg.selectAll(".row")
+        	    .data(data)
+        	  	.enter().append("g")
+        	    .attr("class", "row")
+        	    .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
+
+        	var cell = row.selectAll(".cell")
+        	    .data(function(d) { return d; })
+        			.enter().append("g")
+        	    .attr("class", "cell")
+        	    .attr("transform", function(d, i) { return "translate(" + x(i) + ", 0)"; });
+
+        	cell.append('rect')
+        	    .attr("width", x.rangeBand())
+        	    .attr("height", y.rangeBand())
+        	    .style("stroke-width", 0);
+
+            cell.append("text")
+        	    .attr("dy", ".32em")
+        	    .attr("x", x.rangeBand() / 2)
+        	    .attr("y", y.rangeBand() / 2)
+        	    .attr("text-anchor", "middle")
+        	    .style("fill", function(d, i) { return d >= maxValue/2 ? 'white' : 'black'; })
+        	    .text(function(d, i) { return d; });
+
+        	row.selectAll(".cell")
+        	    .data(function(d, i) { return data[i]; })
+        	    .style("fill", colorMap);
+
+        	var labels = svg.append('g')
+        		.attr('class', "labels");
+
+        	var columnLabels = labels.selectAll(".column-label")
+        	    .data(labelsData)
+        	    .enter().append("g")
+        	    .attr("class", "column-label")
+        	    .attr("transform", function(d, i) { return "translate(" + x(i) + "," + height + ")"; });
+
+        	columnLabels.append("line")
+        		.style("stroke", "white")
+        	    .style("stroke-width", "1px")
+        	    .attr("x1", x.rangeBand() / 2)
+        	    .attr("x2", x.rangeBand() / 2)
+        	    .attr("y1", 0)
+        	    .attr("y2", 5);
+
+        	columnLabels.append("text")
+        	    .attr("x", 30)
+        	    .attr("y", y.rangeBand() / 2)
+        	    .attr("dy", ".22em")
+        	    .attr("text-anchor", "end")
+        	    .attr("transform", "rotate(-60)")
+        	    .text(function(d, i) { return d; });
+
+        	var rowLabels = labels.selectAll(".row-label")
+        	    .data(labelsData)
+        	  .enter().append("g")
+        	    .attr("class", "row-label")
+        	    .attr("transform", function(d, i) { return "translate(" + 0 + "," + y(i) + ")"; });
+
+        	rowLabels.append("line")
+        		.style("stroke", "white")
+        	    .style("stroke-width", "1px")
+        	    .attr("x1", 0)
+        	    .attr("x2", -5)
+        	    .attr("y1", y.rangeBand() / 2)
+        	    .attr("y2", y.rangeBand() / 2);
+
+        	rowLabels.append("text")
+        	    .attr("x", -8)
+        	    .attr("y", y.rangeBand() / 2)
+        	    .attr("dy", ".32em")
+        	    .attr("text-anchor", "end")
+        	    .text(function(d, i) { return d; });
+
+            var y = d3.scale.linear()
+            .range([height, 0])
+            .domain([minValue, maxValue]);
+
+            var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("right");
+
+            key.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(41," + margin.top + ")")
+            .call(yAxis)
+
+        }
+
+        // The table generation function
+        ctrl.tabulate = function(data, columns) {
+            var table = d3.select("#dataView").append("table")
+                    .attr("style", "margin-left: " + margin.left +"px"),
+                thead = table.append("thead"),
+                tbody = table.append("tbody");
+
+            // append the header row
+            thead.append("tr")
+                .selectAll("th")
+                .data(columns)
+                .enter()
+                .append("th")
+                    .text(function(column) { return column; });
+
+            // create a row for each object in the data
+            var rows = tbody.selectAll("tr")
+                .data(data)
+                .enter()
+                .append("tr");
+
+            // create a cell in each row for each column
+            var cells = rows.selectAll("td")
+                .data(function(row) {
+                    return columns.map(function(column) {
+                        return {column: column, value: row[column]};
+                    });
+                })
+                .enter()
+                .append("td")
+                .attr("style", "font-family: Courier") // sets the font style
+                    .html(function(d) { return d.value; });
+
+            return table;
+        }
+
     }]);

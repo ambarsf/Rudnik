@@ -1,3 +1,32 @@
+/* Matrix Stuff */
+.axis text {
+    font: 10px sans-serif;
+}
+
+.labels{
+    color: white;
+}
+
+.axis line, .axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+td, th, tr {
+    padding: 4px;
+    border: 1px solid white;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+#dataView{
+  margin-top:50px;
+}
+/* end of matrix stuff*/
+
 body, html {
 	font-family: 'Open Sans', sans-serif;
 	text-rendering: optimizeLegibility !important;
@@ -39,13 +68,13 @@ canvas{
 	position: absolute;
 	color: white;
 	width: 500px;
-	top: 47%;
+	top: 53%;
   left: 33.5%;
 }
 .arrow-icon{
 	position: absolute;
 	height: 120px;
-	top: 55%;
+	top: 63%;
   left: 46%;
 }
 .nav-icon{
